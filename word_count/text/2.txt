@@ -1,0 +1,19 @@
+Streams, objectMode, and info` objects
+
+In winston, both Logger and Transport instances are treated as objectMode streams that accept an info object. The info object represents a single log message. The object itself is mutable. Every info must have at least the level and message properties:
+
+{
+  level: 'info',                 // Level of the logging message  
+  message: 'Hey! Log something?' // Descriptive message being logged.
+}
+
+winston.format itself exposes several additional properties:
+
+    splat: string interpolation splat for %d %s-style messages.
+    timestamp: timestamp the message was received.
+    label: custom label associated with each message.
+
+As a consumer you may add whatever properties you wish – internal state is maintained by Symbol properties:
+
+    Symbol.for('level') (READ-ONLY): equal to level property. Is treated as immutable by all code.
+    Symbol.for('message'): complete string message set by "finalizing formats": json, logstash, printf, prettyPrint, and simple.

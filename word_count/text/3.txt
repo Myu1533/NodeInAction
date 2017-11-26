@@ -1,0 +1,52 @@
+Profiling
+
+In addition to logging messages and metadata, winston also has a simple profiling mechanism implemented for any logger:
+
+//
+// Start profile of 'test'
+//
+logger.profile('test');
+
+setTimeout(function () {
+  //
+  // Stop profile of 'test'. Logging will now take place:
+  //   '17 Jan 21:00:00 - info: test duration=1000ms'
+  //
+  logger.profile('test');
+}, 1000);
+
+Also you can start a timer and keep a reference that you can call `.done()`` on:
+
+ // Returns an object corresponding to a specific timing. When done
+ // is called the timer will finish and log the duration. e.g.:
+ //
+ const profiler = logger.startTimer();
+ setTimeout(function () {
+   profiler.done({ message: 'Logging message' });
+ }, 1000);
+
+All profile messages are set to 'info' level by default and both message and metadata are optional. There are no plans in the Roadmap to make this configurable, but we are open to suggestions through new issues!
+Querying Logs
+
+winston supports querying of logs with Loggly-like options. See Loggly Search API. Specifically: File, Couchdb, Redis, Loggly, Nssocket, and Http.
+
+const options = {
+  from: new Date() - (24 * 60 * 60 * 1000),
+  until: new Date(),
+  limit: 10,
+  start: 0,
+  order: 'desc',
+  fields: ['message']
+};
+
+//
+// Find items logged between today and yesterday.
+//
+logger.query(options, function (err, results) {
+  if (err) {
+    /* TODO: handle me */
+    throw err;
+  }
+
+  console.log(results);
+});
