@@ -1,6 +1,7 @@
 var http = require('http')
 var items = []
 var server = http.createServer(function (req, res) {
+  console.log(req.method)
   if ('/' == req.url) {
     switch (req.method) {
       case 'GET':
@@ -8,6 +9,9 @@ var server = http.createServer(function (req, res) {
         break;
       case 'POST':
         add(req, res)
+        break;
+      case 'DELETE':
+        del(req, res)
         break;
       default:
         badRequest(res)
@@ -24,8 +28,8 @@ function show(res) {
   var html = '<html><head><title>Todo List</title></head></html>' +
     '<h1>Todo List</h1>' +
     '<ul>' +
-    items.map(function (item) {
-      return '<li>' + item + '</li>'
+    items.map(function (item, index) {
+      return '<li>' + item + '<form method="DELETE" action="/?idx=' + index + '"><input type="submit" value="Delete"></form></li>'
     }).join('') +
     '</ul>' +
     '<form method="POST" action="/">' +
@@ -57,6 +61,17 @@ function add(req, res) {
   req.on('data', function (chunk) {
     body += chunk
   })
+  req.on('end', function () {
+    var obj = qs.parse(body)
+    items.push(obj.item)
+    show(res)
+  })
+}
+
+function del(req, res) {
+  var body = ''
+  req.setEncoding('utf8')
+  console.log(req.body)
   req.on('end', function () {
     var obj = qs.parse(body)
     items.push(obj.item)
