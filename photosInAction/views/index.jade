@@ -5,6 +5,6 @@ block content
   p Welcome to #{title}
   #photos
     each item in photos
-      div
+      .photo
         h2= item.name
-        img(src=item.path)
+        img(src='/photos/' + item.path)
