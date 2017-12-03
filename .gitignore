@@ -1,3 +1,5 @@
 node_modules/
 random_story/node_modules/
 package-lock.json
+photosInAction/node_modules
+photosInAction/package-lock.json

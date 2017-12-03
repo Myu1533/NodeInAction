@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  #photos
+    each item in photos
+      div
+        h2= item.name
+        img(src=item.path)
