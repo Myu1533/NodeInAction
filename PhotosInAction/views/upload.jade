@@ -2,11 +2,12 @@ extends layout
 
 block content
   h1= title
+  img(src="/photos/61207f1d961c879398fae8ebe170f745.png", alt="")
   p= 'Upload a photo to your account below.'
-    form(method="POST", enctype="multipart/form-data")
+    form(method="POST", enctype="multipart/form-data", action="/upload")
         p
-            input(type="text",name="photo[name]", placeholder='Name')
+            input(type="text",name="name", placeholder='Name')
         p
-            input(type="file", name="photo[image]")
+            input(type="file", name="photo")
         p
             input(type="submit", value="Upload")

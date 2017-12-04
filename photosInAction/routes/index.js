@@ -4,8 +4,6 @@ var photos = require('./photos')
 
 /* GET home page. */
 // router.get('/', photos.list);
-router.get('/', function(req, res, next) {
-  res.render('index', { photos: photos.photos });
-});
+router.get('/', photos.list);
 
 module.exports = router;
