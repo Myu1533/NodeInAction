@@ -1,0 +1,5 @@
+if locals.messages
+  each item in messages
+    p(class=item.type) #{message.string}
+else
+  removeMessages()
