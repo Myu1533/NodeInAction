@@ -1,3 +1,4 @@
+var entries = require('./routes/entries')
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -5,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session')
+var user = require('./lib/middleware/user')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -25,10 +27,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(user)
 app.use(session())
 app.use(messages)
 
-app.use('/', index);
+// app.use('/', index);
+app.get('/', entries.list)
 app.use('/users', users);
 app.get('/register', register.form)
 app.post('/register', register.submit)
