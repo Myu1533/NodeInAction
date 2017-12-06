@@ -12,7 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var register = require('./routes/register')
 var login = require('./routes/login')
-var messages = require*'./lib/messages.js'
+var messages = require('./lib/messages.js')
 
 var app = express();
 
@@ -24,30 +24,34 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
+app.use(session({
+  secret: 'test'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(user)
-app.use(session())
-app.use(messages)
+app.use(user);
+app.use(messages);
 
 // app.use('/', index);
 app.get('/', entries.list)
 app.use('/users', users);
 app.get('/register', register.form)
 app.post('/register', register.submit)
-app.get('login', login.form)
+app.get('/login', login.form)
 app.post('/login', login.submit)
 app.get('/logout', login.logout)
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

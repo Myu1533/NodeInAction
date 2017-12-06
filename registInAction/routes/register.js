@@ -7,16 +7,17 @@ exports.form = function (req, res) {
 }
 
 exports.submit = function (req, res, next) {
-  var data = req.body.user
-  User.getByName(data.name, function (err, user) {
+  var name = req.body.username
+  var pass = req.body.userpass
+  User.getByName(name, function (err, user) {
     if (err) return next(err)
     if (user.id) {
       res.error('Username already taken!')
       res.redirect('back')
     } else {
       user = new User({
-        name: data.name,
-        pass: data.pass
+        name: name,
+        pass: pass
       })
       user.save(function (err) {
         if (err) return next(err)
