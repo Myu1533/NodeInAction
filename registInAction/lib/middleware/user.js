@@ -1,6 +1,9 @@
 var User = require('../user')
 
 var user = function (req, res, next) {
+  if(req.remoteUser){
+    res.locals.user = req.remoteUser
+  }
   var uid = req.session.uid
   if (!uid) return next()
   User.get(uid, function (err, user) {

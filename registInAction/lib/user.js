@@ -37,13 +37,13 @@ User.prototype.update = function (fn) {
   })
 }
 
-User.prototype.hashPassword = function(fn){
+User.prototype.hashPassword = function (fn) {
   var user = this
-  bcrypt.genSalt(12, function(err, salt){
-    if(err) return fn(err)
+  bcrypt.genSalt(12, function (err, salt) {
+    if (err) return fn(err)
     user.salt = salt
-    bcrypt.hash(user.pass, salt, function(err, hash){
-      if(err) return fn(err)
+    bcrypt.hash(user.pass, salt, function (err, hash) {
+      if (err) return fn(err)
       user.pass = hash
       fn()
     })
@@ -61,32 +61,40 @@ User.prototype.hashPassword = function(fn){
 //   console.log('user id %d', tobi.id)
 // })
 
-User.getByName = function(name, fn){
-  User.getId(name, function(err,id){
-    if(err) return fn(err)
+User.getByName = function (name, fn) {
+  User.getId(name, function (err, id) {
+    if (err) return fn(err)
     User.get(id, fn)
   })
 }
 
-User.getId = function(name,fn){
+User.getId = function (name, fn) {
   db.get('user:id:' + name, fn)
 }
 
-User.get = function(id,fn){
-  db.hgetall('user:' + id, function(err,user) {
-    if(err) return fn(err)
+User.get = function (id, fn) {
+  db.hgetall('user:' + id, function (err, user) {
+    if (err) return fn(err)
     fn(null, new User(user))
   })
 }
 
-User.authenticate = function(name,pass,fn){
-  User.getByName(name, function(err,user){
-    if(err) return fn(err)
-    if(!user.id) return fn()
-    bcrypt.hash(pass, user.salt, function(err, hash){
-      if(err) return fn(err)
-      if(hash == user.pass) return fn(null, user)
+User.authenticate = function (name, pass, fn) {
+  User.getByName(name, function (err, user) {
+    if (err) return fn(err)
+    if (!user.id) return fn()
+    bcrypt.hash(pass, user.salt, function (err, hash) {
+      if (err) return fn(err)
+      if (hash == user.pass) return fn(null, user)
       fn()
     })
   })
 }
+
+User.prototype.toJSON = function () {
+  return {
+    id: this.id,
+    name: this.name
+  }
+}
+

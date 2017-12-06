@@ -16,13 +16,17 @@ Entry.prototype.save = function (fn) {
   })
 }
 
-Entry.getRange = function(from, to, fn){
-  db.lrange('entries', from, to, function(err, items){
-    if(err) return fn(err)
+Entry.getRange = function (from, to, fn) {
+  db.lrange('entries', from, to, function (err, items) {
+    if (err) return fn(err)
     var entries = []
-    items.forEach(function(item){
+    items.forEach(function (item) {
       entries.push(JSON.parse(item))
     })
     fn(null, entries)
   })
+}
+
+Entry.count = function (fn) {
+  db.llen('entries', fn)
 }

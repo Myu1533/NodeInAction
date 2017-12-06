@@ -1,0 +1,7 @@
+#pager
+  if page.count > 1
+    if page.number
+      a#prev(href='/'+page.number) Prev
+    if page.number < page.count - 1
+      if page.number
+        a#next(href='/' + page.number + 2) Next

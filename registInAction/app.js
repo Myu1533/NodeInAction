@@ -1,4 +1,7 @@
 var entries = require('./routes/entries')
+var Entry = require('./lib/entry')
+var validate = require('./lib/middleware/validate')
+var page = require('./lib/middleware/page')
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,6 +12,7 @@ var session = require('express-session')
 var user = require('./lib/middleware/user')
 
 var index = require('./routes/index');
+var api = require('./routes/api');
 var users = require('./routes/users');
 var register = require('./routes/register')
 var login = require('./routes/login')
@@ -36,13 +40,18 @@ app.use(user);
 app.use(messages);
 
 // app.use('/', index);
-app.get('/', entries.list)
 app.use('/users', users);
-app.get('/register', register.form)
-app.post('/register', register.submit)
-app.get('/login', login.form)
-app.post('/login', login.submit)
-app.get('/logout', login.logout)
+app.get('/register', register.form) // login page
+app.post('/register', register.submit) // login post
+app.get('/login', login.form) // login page
+app.post('/login', login.submit) // login post
+app.get('/logout', login.logout) // logout get
+app.get('/post', entries.form) // post page
+app.post('/post', entries.submit) // post post
+app.get('/api/user/:id', api.user)
+app.post('/api/entry', entries.submit)
+app.get('/api/entries/:page?', page(Entry.count), api.entries)
+app.get('/:page?', page(Entry.count, 5), entries.list)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
